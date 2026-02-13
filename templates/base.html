@@ -12,14 +12,17 @@
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-<div class="sidebar-nav">
-  {% block sidebar %}
-    {% include "includes/sidebar.html" %}
-  {% endblock %}
-</div>
-<div>
-  {% block content %}
-  {% endblock %}
-</div>
+  <div class="container-fluid mt-3">
+    <div class="row">
+      <div class="col-3">
+        {% block sidebar %}
+          {% include "includes/sidebar.html" %}
+        {% endblock %}
+      </div>
+      <div class="col-9">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
 </body>
 </html>

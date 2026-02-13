@@ -5,18 +5,34 @@
 {% endblock %}
 
 {% block content %}
-  <h1>TODO list</h1>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="page-title mb-0">TODO list</h1>
+    <a class="btn btn-primary" href="{% url 'tasks:task-create' %}">Add task</a>
+  </div>
   {% if task_list %}
     {% for task in task_list %}
       <div>
-        <b>{{ task.content }} <span class="status {% if task.is_completed %}done{% else %}not-done{% endif %}">{% if task.is_completed %}Done{% else %}Not done{% endif %}</span></b>
-        <br>
-        <p class="small">Created: {{ task.created_at }}</p>
-        <br>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <b>{{ task.content }} <span class="status {% if task.is_done %}done{% else %}not-done{% endif %}">{% if task.is_done %}Done{% else %}Not done{% endif %}</span></b>
+          {% if task.is_done %}
+            <form method="post" action="{% url 'tasks:task-toggle' pk=task.pk %}">
+              {% csrf_token %}
+              <button class="btn btn-secondary" type="submit">Undo</button>
+            </form>
+          {% else %}
+            <form method="post" action="{% url 'tasks:task-toggle' pk=task.pk %}">
+              {% csrf_token %}
+              <button class="btn btn-success" type="submit">Complete</button>
+            </form>
+          {% endif %}
+        </div>
+        <p class="small">Created: {{ task.created_at }} {% if task.deadline %}<span style="color: darkred">Deadline: {{ task.deadline }}</span>{% endif %}</p>
         <p style="color: gray">Tags:
           {% for tag in task.tags.all %}
             {{ tag }}
-          {% endfor %}</p>
+          {% endfor %}
+        <a href="{% url 'tasks:task-update' task.id %}">Update</a>
+        <a href="{% url 'tasks:task-delete' task.id %}">Delete</a></p>
       </div>
       <hr>
     {% endfor %}

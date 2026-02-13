@@ -2,7 +2,9 @@ body {
     margin-top: 20px;
 }
 
-.sidebar-nav {
-    padding: 0;
-    list-style: none;
+.status.done {
+    color: green;
+}
+.status.not-done {
+    color: red;
 }

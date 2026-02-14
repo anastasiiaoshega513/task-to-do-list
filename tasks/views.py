@@ -1,16 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from tasks.models import Task, Tag
 
 
-def task_toggle(request, pk):
-    task = Task.objects.get(pk=pk)
-    if request.method == "POST":
+class TaskToggleView(generic.View):
+
+    def post(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
         task.is_done = not task.is_done
         task.save(update_fields=["is_done"])
-    return redirect(reverse("tasks:index"))
+        return redirect(reverse("tasks:index"))
 
 
 class TaskListView(generic.ListView):
